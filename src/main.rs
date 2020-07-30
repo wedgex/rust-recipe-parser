@@ -19,8 +19,14 @@ fn parse(body: Json<ParseRequest>) -> Option<Json<Recipe>> {
   // TODO actual error responses
   match Recipe::from(body.url.clone()) {
     Ok(Some(recipe)) => Some(Json(recipe)),
-    Ok(None) => None,
-    Err(_) => None,
+    Ok(None) => {
+      println!("No recipe found.");
+      None
+    }
+    Err(e) => {
+      println!("error: {}", e.to_string());
+      None
+    }
   }
 }
 

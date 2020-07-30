@@ -6,8 +6,8 @@ use std::fmt::Debug;
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub struct Ingredient {
   name: String,
-  unit: String,
-  aisle: String,
+  unit: Option<String>,
+  aisle: Option<String>,
   amount: f32,
 }
 
@@ -34,20 +34,20 @@ mod tests {
     let expected_ingredients = vec![
       Ingredient {
         name: "ground beef".to_string(),
-        unit: "pounds".to_string(),
-        aisle: "Meat".to_string(),
+        unit: Some("pounds".to_string()),
+        aisle: Some("Meat".to_string()),
         amount: 1.25,
       },
       Ingredient {
         name: "jalapenos".to_string(),
-        unit: "".to_string(),
-        aisle: "Canned and Jarred;Produce;Ethnic Foods".to_string(),
+        unit: Some("".to_string()),
+        aisle: Some("Canned and Jarred;Produce;Ethnic Foods".to_string()),
         amount: 3.0,
       },
       Ingredient {
         name: "onion".to_string(),
-        unit: "medium".to_string(),
-        aisle: "Produce".to_string(),
+        unit: Some("medium".to_string()),
+        aisle: Some("Produce".to_string()),
         amount: 1.0,
       },
     ];
