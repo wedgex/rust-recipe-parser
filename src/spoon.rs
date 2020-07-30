@@ -14,21 +14,22 @@ impl SpoonClient {
     }
   }
 
-  pub async fn parse_ingredients<T: DeserializeOwned>(
+  // https://spoonacular.com/food-api/docs#Parse-Ingredients
+  pub fn parse_ingredients<T: DeserializeOwned>(
     &self,
     request: ParseIngredientRequest,
   ) -> Result<Vec<T>, reqwest::Error> {
-    let client = reqwest::Client::new();
-    let response = client
+    let client = reqwest::blocking::Client::new();
+    client
       .post("https://api.spoonacular.com/recipes/parseIngredients")
       .query(&[("apiKey", &self.api_key)])
       .form(&request)
-      .send()
-      .await?;
-    response.json().await
+      .send()?
+      .json()
   }
 }
 
+// https://spoonacular.com/food-api/
 fn api_key() -> Result<String, env::VarError> {
   env::var("SPOON_API_KEY")
 }

@@ -1,10 +1,10 @@
 use crate::spoon::{ParseIngredientRequest, SpoonClient};
 use reqwest;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use std::fmt::Debug;
 
-#[derive(Deserialize, PartialEq, Debug)]
-struct Ingredient {
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
+pub struct Ingredient {
   name: String,
   unit: String,
   aisle: String,
@@ -12,20 +12,19 @@ struct Ingredient {
 }
 
 impl Ingredient {
-  pub async fn parse(raw_ingredients: Vec<String>) -> Result<Vec<Self>, reqwest::Error> {
+  pub fn parse(raw_ingredients: Vec<String>) -> Result<Vec<Self>, reqwest::Error> {
     let request = ParseIngredientRequest::from_vec(raw_ingredients);
     let client = SpoonClient::new();
-    Ok(client.parse_ingredients(request).await?)
+    Ok(client.parse_ingredients(request)?)
   }
 }
 
 #[cfg(test)]
 mod tests {
   use super::*;
-  use tokio;
 
-  #[tokio::test]
-  async fn test_parses_ingredient_list() {
+  #[test]
+  fn test_parses_ingredient_list() {
     let ingredient_list = vec![
       "1 1/4 pounds of ground beef".to_string(),
       "3 jalapenos, diced".to_string(),
@@ -53,11 +52,11 @@ mod tests {
       },
     ];
 
-    let ingredients = Ingredient::parse(ingredient_list).await;
+    let ingredients = Ingredient::parse(ingredient_list);
 
     match ingredients {
       Ok(ingredients) => assert_eq!(ingredients, expected_ingredients),
-      Err(e) => assert_eq!("", e.to_string()),
+      Err(e) => assert!(false, e.to_string()),
     }
   }
 }
