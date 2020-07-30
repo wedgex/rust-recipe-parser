@@ -1,1 +1,2 @@
+mod ingredient;
 mod schema;

@@ -4,6 +4,7 @@
 extern crate rocket;
 
 mod recipes;
+mod spoon;
 
 #[get("/")]
 fn index() -> &'static str {
